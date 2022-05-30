@@ -1,0 +1,81 @@
+{% extends 'app/base.html' %}
+{% block content %}
+
+<div class="row mt=2">
+    <div class="col-md-12">
+        <h4 class=''>ADD New Student</h4>
+        <form action="" method="post"nonvalidate>
+            {% csrf_token %}
+            {{form.as_p}}
+            <input type="submit"class='btn btn-dark px-4'value='Add'>
+        </form>      
+    </div>
+<div>
+    <div class="row mt-3">
+        <div class="col-md-12">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success alert-{{ message.tags }}" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+            <h4 class =''>Show Data</h4>    
+            <table class="table table-hover">
+                <thead> 
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Password</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for st in ServiceDatafinal %}
+                  <tr>
+                    <th scope="row">{{st.id}}</th>
+                    <td>{{st.name}}</td>
+                    <td>{{st.email}}</td>
+                    <td>{{st.password}}</td>
+                    <td>
+                        <a href="{% url 'updatedata' st.id %}"class='btn btn-warning btn-sm'>Edit</a>
+                       <form action="{% url 'deletedata' st.id %}" method="post"class='d-inline'>
+                           {% csrf_token %}
+                           <input type="submit"value='delete'class='btn btn-danger btn-sm'>
+                       </form>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+        <div>
+    
+    </div>
+    
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {% if ServiceDatafinal.has_previous %}
+              <li class="page-item"><a class="page-link" href="?page={{ ServiceDatafinal.previous_page_number }}">Previous</a></li>
+              {% endif %}
+              
+              {% for i in ServiceDatafinal.paginator.page_range %}
+              {% if users.number == i %}
+              <li class="page-item"><a class="page-link" href="#">{{ i }} </a></li>
+              {% else %}
+              <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }} </a></li>
+              {% endif %}
+                {% endfor %}
+
+              {% if  ServiceDatafinal.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{  ServiceDatafinal.next_page_number }}">Next</a></li>
+              {% endif %}
+            </ul>
+          </nav>
+      
+    </div>
+</div>
+{% endblock content %}
+
+
